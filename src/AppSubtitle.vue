@@ -1,5 +1,5 @@
 <template>
-  <h2>Опыт работы</h2>
+  <h2><slot /></h2>
 </template>
 
 <script>

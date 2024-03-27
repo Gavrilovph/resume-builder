@@ -2,10 +2,12 @@
     <div class="card">
       <h2>Комментарии</h2>
       <ul class="list">
-        <li class="list-item">
+        <li
+        class="list-item"
+        v-for="comment in commentsList" :key="comment.id">
           <div>
-            <p><strong>test@microsoft.com</strong></p>
-            <small>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Eligendi, reiciendis.</small>
+            <p><strong>{{ comment.email }}</strong></p>
+            <small>{{ comment.body }}</small>
           </div>
         </li>
       </ul>
@@ -14,6 +16,12 @@
 
 <script>
 export default {
+  props: ['commentsList'],
+  methods: {
+    test () {
+      console.log(this.commentsList)
+    }
+  }
 
 }
 </script>

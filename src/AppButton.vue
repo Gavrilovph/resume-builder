@@ -1,9 +1,16 @@
 <template>
-  <button class="btn primary" type="submit"><slot></slot></button>
+  <button
+  class="btn primary" :type="btnType"
+  @click="$emit('load')"
+  ><slot></slot></button>
 </template>
 
 <script>
 export default {
+  props: ['btnType'],
+  emits: [
+    'load'
+  ]
 }
 </script>
 

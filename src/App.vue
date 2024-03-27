@@ -1,14 +1,20 @@
 <template>
   <div class="container column">
-    <app-left-card @submit-handler="submitHandler"></app-left-card>
-    <app-right-card></app-right-card>
+    <app-left-card @submit-handler="transferToRight"></app-left-card>
+    <app-right-card
+    :rightStorage="generalStorage"
+    ></app-right-card>
   </div>
   <div class="container">
     <p>
-      <app-button>Загрузить комментарии</app-button>
+      <app-button
+      :btnType="'button'"
+      @load="loadComments"
+      >Загрузить комментарии</app-button>
     </p>
     <app-comments
-    v-if="comments === true"
+    v-if="showComments"
+    :commentsList="comments"
     ></app-comments>
     <app-loader
     v-if="loader === true"
@@ -27,10 +33,11 @@ export default {
   data () {
     return {
       loader: false,
-      comments: false
-      // blockStorage: [],
-      // inputValue: '',
-      // blockType: 'title'
+      showComments: false,
+      comments: [],
+      generalStorage: [],
+      errors: [],
+      urlComments: 'https://jsonplaceholder.typicode.com/comments?_limit=42'
     }
   },
   components: {
@@ -41,12 +48,27 @@ export default {
     'app-button': AppButton
   },
   methods: {
-    // submitHandler () {
-    //   this.blockStorage.push({ type: this.blockType, value: this.inputValue })
-    //   console.log(this.blockStorage)
-    //   this.blockType = 'title'
-    //   this.inputValue = ''
-    // }
+    transferToRight (data) {
+      this.generalStorage.push(data)
+      console.log(this.generalStorage)
+    },
+    async loadComments () {
+      try {
+        this.loader = true
+        const response = await fetch(this.urlComments)
+        const result = await response.json()
+        this.comments.push(...result)
+        console.log(this.comments)
+        this.showComments = true
+        this.loader = false
+      } catch (error) {
+      // this.errors.push(error)
+        console.log(error)
+        this.loader = false
+      }
+    }
+  },
+  async mounted () {
   }
 }
 </script>

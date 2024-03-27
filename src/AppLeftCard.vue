@@ -1,8 +1,8 @@
 <template>
-  <form class="card card-w30" @submit.prevent="submit">
+  <form class="card card-w30" @submit.prevent="submitHandler">
     <div class="form-control">
       <label for="type">Тип блока</label>
-      <select id="type" v-model="blockType" >
+      <select id="type" v-model="blockType">
         <option value="title">Заголовок</option>
         <option value="subtitle">Подзаголовок</option>
         <option value="avatar">Аватар</option>
@@ -15,11 +15,12 @@
       <textarea
       id="value"
       rows="3"
-      v-model="inputValue"
+      v-model.trim="textValue"
       ></textarea>
     </div>
     <app-button
-    :disabled="inputValue.length < 3"
+    :btnType="'submit'"
+    :disabled="textValue.length < 3"
     >Добавить</app-button>
   </form>
 </template>
@@ -28,23 +29,24 @@
 import AppButton from './AppButton'
 
 export default {
+  emits: [
+    'submit-handler'
+  ],
   data () {
     return {
-      inputValue: '',
+      textValue: '',
       blockType: 'title'
     }
   },
-  emits: ['submit-handler'],
   methods: {
-    submit () {
-      this.$emit('submit-handler')
+    submitHandler () {
+      this.$emit('submit-handler', {
+        block: this.blockType,
+        text: this.textValue
+      })
+      this.blockType = 'title'
+      this.textValue = ''
     }
-    // submitHandler () {
-    //   this.blockStorage.push({ type: this.blockType, value: this.inputValue })
-    //   console.log(this.blockStorage)
-    //   this.blockType = 'title'
-    //   this.inputValue = ''
-    // }
   },
   components: {
     'app-button': AppButton
